@@ -1,0 +1,28 @@
+// Comando para criar projeto
+flutter create nome_projeto
+
+// Rodando projeto
+flutter run
+
+//Atalho sugestão
+Ctrl + .
+
+//Debugando 
+Acesse Run e clique em Start Debuggin
+
+//Configurando Fontes
+As fontes são configuradas no arquivo pubspec.yaml, cuidado, ele é sencivel as espaço, tem que identar certo
+
+//Configurando Imagens
+As Imagens são configuradas no arquivo pubspec.yaml
+
+//Baixando pacotes
+Os pacotes são configurados no arquivo pubspec.yaml
+
+//Dev Tools
+Ctrl + Shift + P 
+Escreva DevTools
+Escolha Open in Web Browser
+
+Em Select Widget Mode é exibido no dispositivo qual componente esta selecionado
+Em Repaint Rainbow ele marca os elementes que sofreram alteração (Exemplo, clicou em um botão, e um texto mudou)
