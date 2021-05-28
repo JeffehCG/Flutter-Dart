@@ -1,40 +1,57 @@
+import 'package:chat/widgets/messages.dart';
+import 'package:chat/widgets/new_message.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ChatScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: StreamBuilder(
-        // Utilizando Firestore - Database firebase
-        // Recuperando a coleção chat e seus dados, e escutando caso ocorra alguma alteração na coleção
-        stream: Firestore.instance.collection('chat').snapshots(),
-        builder: (ctx, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-
-          // Recuperando os dados das coleções
-          final documents = snapshot.data.documents;
-          return ListView.builder(
-            itemCount: documents.length,
-            itemBuilder: (ctx, i) => Container(
-              padding: EdgeInsets.all(10),
-              child: Text(documents[i]['text']),
+      appBar: AppBar(
+        title: Text('Flutter Chat'),
+        actions: [
+          DropdownButtonHideUnderline(
+            child: DropdownButton(
+              icon: Icon(
+                Icons.more_vert,
+                color: Theme.of(context).primaryIconTheme.color,
+              ),
+              items: [
+                DropdownMenuItem(
+                  value: 'logout',
+                  child: Container(
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.exit_to_app,
+                          color: Colors.black,
+                        ),
+                        SizedBox(width: 8),
+                        Text('Sair')
+                      ],
+                    ),
+                  ),
+                )
+              ],
+              onChanged: (item) {
+                if (item == 'logout') {
+                  // Efetuando logout com a biblioteca FirebaseAuth
+                  FirebaseAuth.instance.signOut();
+                }
+              },
             ),
-          );
-        },
+          )
+        ],
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {
-          // Adicionando dados ao Firestore
-          Firestore.instance.collection('chat').add({
-            'text': 'Adicionado manualmente'
-          });
-        },
+      // Rederizando Mensagens Firestore
+      body: Container(
+        child: Column(
+          children: [
+            Expanded(child: Messages()),
+            NewMessage()
+          ],
+        ),
       ),
     );
   }
