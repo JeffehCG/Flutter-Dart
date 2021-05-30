@@ -40,6 +40,8 @@ class _NewMessageState extends State<NewMessage> {
         children: [
           Expanded(
             child: TextField(
+              autocorrect: true,
+              textCapitalization: TextCapitalization.sentences, // Primeira letra maiuscula
               controller: _controller,
               decoration: InputDecoration(labelText: 'Enviar mensagem!'),
               onChanged: (value) {

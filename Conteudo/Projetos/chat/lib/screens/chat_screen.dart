@@ -23,37 +23,31 @@ class _ChatScreenState extends State<ChatScreen> {
     // Para utilizar os metdos do segundo e terceiro estado é preciso que o Flutter_Notification_Click
     // esteja configurado no arquivo android\app\src\main\AndroidManifest.xml dentro de activity
 
+    // Quando a aplicação esta em backgroud, e é clicado, pode ser escutada por onMessageOpenedApp
+    // onde quando o app for aberto pela notificação, executara alguma função definida por você
+
     FirebaseMessaging messaging = FirebaseMessaging.instance;
     FirebaseMessaging.onMessage.listen((message) {
       print('onMessage...');
-      print(message);
+      print(message.notification?.title);
+      print(message.notification?.body);
     });
-    FirebaseMessaging.onBackgroundMessage((message) {
-      print('onBackgroundMessage...');
-      print(message);
-      return;
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      print('onMessageOpenedApp...');
+      print(message.notification?.title);
+      print(message.notification?.body);
     });
-    // final fbm = FirebaseMessaging();
-    // fbm.configure(
-    //   onMessage: (msg) {
-    //     print('onMessage...');
-    //     print(msg);
-    //     return;
-    //   },
-    //   onResume: (msg) {
-    //     print('onResume...');
-    //     print(msg);
-    //     return;
-    //   },
-    //   onLaunch: (msg) {
-    //     print('onLaunch...');
-    //     print(msg);
-    //     return;
-    //   },
-    // );
+
+    // Ficar escutando mensagens do topico 'chat', enviado pelo firebase
+    messaging.subscribeToTopic('chat');
+    
+    Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+      print("Handling a background message: ${message.messageId}");
+    }
+
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
     // Solicitação para usuario de permissão para push notification (Apanas para iOS)
-    // fbm.requestNotificationPermissions();
     final settings = messaging.requestPermission(
       alert: true,
       announcement: false,
