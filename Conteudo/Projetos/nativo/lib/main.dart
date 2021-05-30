@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() {
   runApp(MyApp());
@@ -12,53 +13,85 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  int _a = 0;
+  int _b = 0;
+  int _sum = 0;
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+  Future<void> _calcSum() async {
+    // Trabalhando com codigo nativo
+    // Criando um canal para efetuar a comunicação do flutter com o codigo nativo
+    const channel = MethodChannel('cod3r.com.br/nativo');
+
+    // Invocando uma função apartir do canal de comunicação
+    // Primeiro parametro é o nome da função, e o segundo os parametros que seram passados para ela
+    try {
+      final sum = await channel.invokeMethod('calcSum', {"a": _a, "b": _b});
+      setState(() {
+        _sum = sum;
+      });
+    } on PlatformException catch (e) {
+      setState(() {
+        _sum = 0;
+      });
+    }
+
+    // O codigo nativo implementado nesse exemplo se encontra no caminho:
+    // Android - android\app\src\main\kotlin\com\example\nativo\MainActivity.kt
+    // iOS = ios\Runner\AppDelegate.swift
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text("Nativo"),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+        child: Padding(
+          padding: EdgeInsets.all(20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Soma... $_sum',
+                style: TextStyle(
+                  fontSize: 30,
+                ),
+              ),
+              TextField(
+                keyboardType: TextInputType.number,
+                onChanged: (value) {
+                  setState(() {
+                    _a = int.tryParse(value) ?? 0;
+                  });
+                },
+              ),
+              TextField(
+                keyboardType: TextInputType.number,
+                onChanged: (value) {
+                  setState(() {
+                    _b = int.tryParse(value) ?? 0;
+                  });
+                },
+              ),
+              ElevatedButton(
+                child: Text('Somar'),
+                onPressed: _calcSum,
+              )
+            ],
+          ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
       ),
     );
   }
