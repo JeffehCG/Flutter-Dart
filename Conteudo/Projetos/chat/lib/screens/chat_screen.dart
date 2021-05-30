@@ -17,12 +17,22 @@ class _ChatScreenState extends State<ChatScreen> {
     // Configurando o push notification
     // Existem 3 cenarios
     // App in Foreground - a aplicação esta ativa na tela (Metodo onMessage())
-    // App in Background - a aplicação esta ativa, mas esta em segundo plano (Metodo onResume())
-    // App Terminated - a aplicação não esta ativa (Metodo onLaunch())
+    // App in Background - a aplicação esta ativa, mas esta em segundo plano (Metodo onBackgroundMessage())
+    // App Terminated - a aplicação não esta ativa (Metodo onBackgroundMessage())
 
     // Para utilizar os metdos do segundo e terceiro estado é preciso que o Flutter_Notification_Click
     // esteja configurado no arquivo android\app\src\main\AndroidManifest.xml dentro de activity
 
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    FirebaseMessaging.onMessage.listen((message) {
+      print('onMessage...');
+      print(message);
+    });
+    FirebaseMessaging.onBackgroundMessage((message) {
+      print('onBackgroundMessage...');
+      print(message);
+      return;
+    });
     // final fbm = FirebaseMessaging();
     // fbm.configure(
     //   onMessage: (msg) {
@@ -44,6 +54,15 @@ class _ChatScreenState extends State<ChatScreen> {
 
     // Solicitação para usuario de permissão para push notification (Apanas para iOS)
     // fbm.requestNotificationPermissions();
+    final settings = messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
   }
 
   @override
