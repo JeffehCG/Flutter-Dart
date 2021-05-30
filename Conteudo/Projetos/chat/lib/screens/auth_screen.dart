@@ -44,7 +44,7 @@ class _AuthScreenState extends State<AuthScreen> {
             .child('user_images')
             .child(authResult.user.uid + '.jpg');
 
-        await ref.putFile(authData.image).onComplete;
+        await ref.putFile(authData.image).whenComplete(() => null);
         final url = await ref.getDownloadURL();
 
         // Salvando o nome de usuario no Firestore (nesse autenticação só armazena email e senha)

@@ -23,7 +23,7 @@ class _ChatScreenState extends State<ChatScreen> {
     // Para utilizar os metdos do segundo e terceiro estado é preciso que o Flutter_Notification_Click
     // esteja configurado no arquivo android\app\src\main\AndroidManifest.xml dentro de activity
 
-    final fbm = FirebaseMessaging();
+    // final fbm = FirebaseMessaging();
     // fbm.configure(
     //   onMessage: (msg) {
     //     print('onMessage...');
@@ -43,7 +43,7 @@ class _ChatScreenState extends State<ChatScreen> {
     // );
 
     // Solicitação para usuario de permissão para push notification (Apanas para iOS)
-    fbm.requestNotificationPermissions();
+    // fbm.requestNotificationPermissions();
   }
 
   @override

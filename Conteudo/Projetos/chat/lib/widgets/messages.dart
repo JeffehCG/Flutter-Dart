@@ -8,6 +8,7 @@ class Messages extends StatelessWidget {
   Widget build(BuildContext context) {
     // Recuperando dados do usuario logado
     final User user = FirebaseAuth.instance.currentUser;
+
     return StreamBuilder(
       // Utilizando Firestore - Database firebase
       // Recuperando a coleção chat e seus dados, e escutando caso ocorra alguma alteração na coleção
@@ -23,7 +24,7 @@ class Messages extends StatelessWidget {
         }
 
         // Recuperando os dados das coleções firestore
-        final chatDocs = chatSnapshot.data.documents;
+        final chatDocs = chatSnapshot.data.docs;
 
         return ListView.builder(
           reverse: true,
@@ -34,7 +35,7 @@ class Messages extends StatelessWidget {
             chatDocs[i].get('userImage'),
             // Identificando se a mensagem é do usuario logado
             chatDocs[i].get('userId') == user.uid,
-            key: ValueKey(chatDocs[i].documentID),
+            key: ValueKey(chatDocs[i].id),
           ),
         );
       },
