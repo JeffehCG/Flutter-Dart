@@ -41,5 +41,12 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<string>Precisamos tirar uma foto!</string>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<string>Precisamos tirar uma foto!</string>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<string>Precisamos tirar uma foto!</string>
 </dict>
 </plist>

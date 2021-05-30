@@ -1,10 +1,51 @@
 import 'package:chat/widgets/messages.dart';
 import 'package:chat/widgets/new_message.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
-class ChatScreen extends StatelessWidget {
+class ChatScreen extends StatefulWidget {
+  @override
+  _ChatScreenState createState() => _ChatScreenState();
+}
+
+class _ChatScreenState extends State<ChatScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    // Configurando o push notification
+    // Existem 3 cenarios
+    // App in Foreground - a aplicação esta ativa na tela (Metodo onMessage())
+    // App in Background - a aplicação esta ativa, mas esta em segundo plano (Metodo onResume())
+    // App Terminated - a aplicação não esta ativa (Metodo onLaunch())
+
+    // Para utilizar os metdos do segundo e terceiro estado é preciso que o Flutter_Notification_Click
+    // esteja configurado no arquivo android\app\src\main\AndroidManifest.xml dentro de activity
+
+    final fbm = FirebaseMessaging();
+    // fbm.configure(
+    //   onMessage: (msg) {
+    //     print('onMessage...');
+    //     print(msg);
+    //     return;
+    //   },
+    //   onResume: (msg) {
+    //     print('onResume...');
+    //     print(msg);
+    //     return;
+    //   },
+    //   onLaunch: (msg) {
+    //     print('onLaunch...');
+    //     print(msg);
+    //     return;
+    //   },
+    // );
+
+    // Solicitação para usuario de permissão para push notification (Apanas para iOS)
+    fbm.requestNotificationPermissions();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,12 +86,14 @@ class ChatScreen extends StatelessWidget {
         ],
       ),
       // Rederizando Mensagens Firestore
-      body: Container(
-        child: Column(
-          children: [
-            Expanded(child: Messages()),
-            NewMessage()
-          ],
+      body: SafeArea(
+        child: Container(
+          child: Column(
+            children: [
+              Expanded(child: Messages()),
+              NewMessage(),
+            ],
+          ),
         ),
       ),
     );
